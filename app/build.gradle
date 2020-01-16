@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOL_VERSION
+    defaultConfig {
+        applicationId APPLICATION_ID
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation rootProject.ext.dependencies['kotlin-stdlib']
+    implementation rootProject.ext.dependencies['androidx-appcompat']
+    implementation rootProject.ext.dependencies['andoirdx-core-ktx']
+    implementation rootProject.ext.dependencies['andoirdx-constraintlayout']
+    implementation rootProject.ext.dependencies['andoirdx-lifecycle-extensions']
+    implementation rootProject.ext.dependencies['andoirdx-lifecycle-viewmodel-ktx']
+    implementation rootProject.ext.dependencies['andoirdx-lifecycle-viewmodel-savedstate']
+    implementation rootProject.ext.dependencies['video-layout']
+
+    // room
+    implementation rootProject.ext.dependencies['room']
+    implementation rootProject.ext.dependencies['room-ktx']
+    kapt rootProject.ext.kapt['room-compile']
+
+    implementation project(':sgcommon')
+    implementation project(':sgnetwork')
+    implementation project(':sgarchitecture')
+
+    testImplementation rootProject.ext.test['junit']
+    androidTestImplementation rootProject.ext.test['test-runner']
+    androidTestImplementation rootProject.ext.test['espresso']
+
+    debugImplementation rootProject.ext.testDependencies['debug-db']
+}

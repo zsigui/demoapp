@@ -1,0 +1,8 @@
+include ':app'
+include ':sgarchitecture'
+include ':sgcommon'
+include ':sgnetwork'
+project(':sgcommon').projectDir = new File('module/sgcommon')
+project(':sgnetwork').projectDir = new File('module/sgnetwork')
+project(':sgarchitecture').projectDir = new File('module/sgarchitecture')
+rootProject.name='DemoApp'

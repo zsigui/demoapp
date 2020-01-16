@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOL_VERSION
+
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 避免Dagger2的错误被吃掉
+    // 相关issue: https://github.com/google/dagger/issues/306
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "500"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.dependencies['kotlin-stdlib']
+    implementation rootProject.ext.dependencies['androidx-appcompat']
+    implementation rootProject.ext.dependencies['andoirdx-core-ktx']
+    // eventbus
+    api rootProject.ext.dependencies['eventbus']
+
+    // dagger
+    api rootProject.ext.dependencies['dagger']
+    api rootProject.ext.dependencies['dagger-support']
+    kapt rootProject.ext.kapt['dagger-compile']
+
+    // json
+    api rootProject.ext.dependencies['jackson-core']
+    api rootProject.ext.dependencies['jackson-annotation']
+    api rootProject.ext.dependencies['jackson-databind']
+    api rootProject.ext.dependencies['jackson-kotlin']
+
+    testImplementation rootProject.ext.test['junit']
+    androidTestImplementation rootProject.ext.test['test-runner']
+    androidTestImplementation rootProject.ext.test['espresso']
+}
